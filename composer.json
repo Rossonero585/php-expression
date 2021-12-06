@@ -1,0 +1,29 @@
+{
+    "name": "rossonero585/php-expression",
+    "type": "library",
+    "license": "MIT",
+    "description": "Simple library for calculating math expressions",
+    "autoload": {
+        "psr-4": {
+            "Rossonero585\\PhpExpression\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rossonero585\\PhpExpression\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dmitry Drozd",
+            "email": "ddrozd@realrussia.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8",
+        "phpstan/phpstan": "^1.2"
+    }
+}

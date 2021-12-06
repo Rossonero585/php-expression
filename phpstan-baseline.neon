@@ -1,0 +1,12 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$number of function round expects float, null given\\.$#"
+			count: 1
+			path: src/Expression.php
+
+		-
+			message: "#^Property Rossonero585\\\\PhpExpression\\\\Expression\\:\\:\\$functions is never read, only written\\.$#"
+			count: 1
+			path: src/Expression.php
+
