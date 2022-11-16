@@ -6,13 +6,14 @@ use Rossonero585\PhpExpression\Exceptions\IncorrectArgumentName;
 use Rossonero585\PhpExpression\Exceptions\IncorrectBracket;
 use Rossonero585\PhpExpression\Exceptions\IncorrectExpression;
 use Rossonero585\PhpExpression\Exceptions\IncorrectToken;
+use Rossonero585\PhpExpression\Exceptions\ParsingException;
 use Rossonero585\PhpExpression\ExpressionParser;
 use PHPUnit\Framework\TestCase;
 use Rossonero585\PhpExpression\Token;
 
 class ExpressionParserTest extends TestCase
 {
-    public function testGetFirstToken()
+    public function testGetFirstToken() : void
     {
         $exp = "a+b+fun(fun(c,d))";
 
@@ -27,7 +28,7 @@ class ExpressionParserTest extends TestCase
 
         do {
             $outputString .= $token->getContent();
-            array_push($tokens, $token);
+            $tokens[] = $token;
         }
         while ($token = $token->next());
 
@@ -42,9 +43,13 @@ class ExpressionParserTest extends TestCase
     }
 
     /**
+     * @param string $expression
+     * @param array<string> $functions
+     * @param array<string> $arguments
+     * @throws ParsingException
      * @dataProvider incorrectExpressionsProvider
      */
-    public function testIncorrectExpression(string $expression, array $functions, array $arguments)
+    public function testIncorrectExpression(string $expression, array $functions, array $arguments) : void
     {
         $this->expectException(IncorrectExpression::class);
 
@@ -52,9 +57,13 @@ class ExpressionParserTest extends TestCase
     }
 
     /**
+     * @param string $expression
+     * @param array<string> $functions
+     * @param array<string> $arguments
+     * @throws ParsingException
      * @dataProvider incorrectBracketProvider
      */
-    public function testIncorrectBracket(string $expression, array $functions, array $arguments)
+    public function testIncorrectBracket(string $expression, array $functions, array $arguments) : void
     {
         $this->expectException(IncorrectBracket::class);
 
@@ -62,9 +71,13 @@ class ExpressionParserTest extends TestCase
     }
 
     /**
+     * @param string $expression
+     * @param array<string> $functions
+     * @param array<string> $arguments
+     * @throws ParsingException
      * @dataProvider incorrectTokenProvider
      */
-    public function testIncorrectToken(string $expression, array $functions, array $arguments)
+    public function testIncorrectToken(string $expression, array $functions, array $arguments) : void
     {
         $this->expectException(IncorrectToken::class);
 
@@ -72,9 +85,13 @@ class ExpressionParserTest extends TestCase
     }
 
     /**
+     * @param string $expression
+     * @param array<string> $functions
+     * @param array<string> $arguments
+     * @throws ParsingException
      * @dataProvider incorrectArgumentNameProvider
      */
-    public function testIncorrectArgumentName(string $expression, array $functions, array $arguments)
+    public function testIncorrectArgumentName(string $expression, array $functions, array $arguments) : void
     {
         $this->expectException(IncorrectArgumentName::class);
 
@@ -83,9 +100,14 @@ class ExpressionParserTest extends TestCase
 
 
     /**
+     * @param string $expression
+     * @param array<string> $functions
+     * @param array<string> $arguments
+     * @param string $expected
+     * @throws ParsingException
      * @dataProvider correctExpressionProvider
      */
-    public function testCorrectExpression(string $expression, array $functions, array $arguments, string $expected)
+    public function testCorrectExpression(string $expression, array $functions, array $arguments, string $expected) : void
     {
         $expressionParser = new ExpressionParser($expression, $functions, $arguments);
 
@@ -102,6 +124,9 @@ class ExpressionParserTest extends TestCase
         $this->assertEquals($expected, $outputString);
     }
 
+    /**
+     * @return array<array{string, array<string>, array<string>}>
+     */
     public function incorrectExpressionsProvider() : array
     {
         return [
@@ -112,6 +137,9 @@ class ExpressionParserTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{string, array<string>, array<string>}>
+     */
     public function incorrectBracketProvider() : array
     {
         return [
@@ -120,6 +148,9 @@ class ExpressionParserTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{string, array<string>, array<string>}>
+     */
     public function incorrectTokenProvider() : array
     {
         return [
@@ -129,6 +160,9 @@ class ExpressionParserTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{string, array<string>, array<string>}>
+     */
     public function incorrectArgumentNameProvider() : array
     {
         return [
@@ -137,6 +171,9 @@ class ExpressionParserTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{string, array<string>, array<string>}>
+     */
     public function correctExpressionProvider() : array
     {
         return [

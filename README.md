@@ -10,16 +10,16 @@ This library allows creating math expression using numbers, brackets, mathematic
 ```php
 <?php
 
-use Rossonero585\PhpExpression\ExpressionFactory;
+$expressionBuilder = new \Rossonero585\PhpExpression\ExpressionBuilder();
 
-$expressionFactory = new ExpressionFactory();
+$expression = $expressionBuilder
+    ->addArguments(['a', 'b'])
+    ->create('a + b');
 
-$expression = $expressionFactory->createExpression('a + b', ['a', 'b']);
-
-echo $expression->execute([5,5]);
+echo $expression->execute(["a" => 5, "b" => 5]);
 // 10
 
-echo $expression->execute([2,1]);
+echo $expression->execute(["a" => 2, "b" => 1]);
 // 3
 
 ```
@@ -28,16 +28,20 @@ echo $expression->execute([2,1]);
 ```php
 <?php
 
-use Rossonero585\PhpExpression\ExpressionFactory;
+$expressionBuilder = new \Rossonero585\PhpExpression\ExpressionBuilder();
 
-$expressionFactory = new ExpressionFactory();
+$expression = $expressionBuilder
+    ->addFunction('convert', function ($value, $curr1, $curr2) {
+        // do some stuff here
+        return 61;
+    })
+    ->addArguments(["x", "curr1", "curr2"])
+    ->create('1.1 * convert(x, curr1, curr2) + 100');
 
-$expressionFactory->addFunction('convert', function ($value, $curr1, $curr2) {
-    // .. do some stuff here
-});
-
-$expression = $expressionFactory->createExpression('1.1 * convert(x, curr1, curr2) + 100', ['x', 'curr1', 'curr2']);
-
-$result = $expression->execute([100, 'RUR', 'USD']);
+$result = $expression->execute([
+    "x" => 100,
+    "curr1" => "USD",
+    "curr2" => "RUB"
+]);
 
 ```

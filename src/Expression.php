@@ -87,8 +87,7 @@ class Expression
             if ($token->isFunction()) {
                 $evalPart = '$this->functions[\''.$token->getContent().'\']';
             } elseif ($token->isArgument()) {
-                $key = array_search($token->getContent(), $this->argumentNames);
-                $evalPart = $arguments[$key];
+                $evalPart = $arguments[$token->getContent()];
                 if (is_string($evalPart)) $evalPart = '\''.$evalPart.'\'';
             } else {
                 $evalPart = $token->getContent();
