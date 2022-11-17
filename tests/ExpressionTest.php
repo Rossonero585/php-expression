@@ -3,6 +3,8 @@
 namespace Rossonero585\PhpExpression\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Rossonero585\PhpExpression\Exceptions\ArgumentIsNotPassed;
+use Rossonero585\PhpExpression\Exceptions\IncorrectArgument;
 use Rossonero585\PhpExpression\ExpressionBuilder;
 
 class ExpressionTest extends TestCase
@@ -52,5 +54,25 @@ class ExpressionTest extends TestCase
                 "partner" => 10
             ])
         );
+    }
+
+    public function testArgumentNotPassedException() : void
+    {
+        $this->expectException(ArgumentIsNotPassed::class);
+
+        (new ExpressionBuilder())
+            ->addArguments(['a', 'b'])
+            ->create('a + b')
+            ->execute(['a' => 2]);
+    }
+
+    public function testIncorrectArgumentException() : void
+    {
+        $this->expectException(IncorrectArgument::class);
+
+        (new ExpressionBuilder())
+            ->addArguments(['a', 'b'])
+            ->create('a + b')
+            ->execute(['a' => '()', 'b' => 1]);
     }
 }

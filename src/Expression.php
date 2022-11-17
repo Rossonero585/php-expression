@@ -2,9 +2,9 @@
 
 namespace Rossonero585\PhpExpression;
 
+use Rossonero585\PhpExpression\Exceptions\ArgumentIsNotPassed;
 use Rossonero585\PhpExpression\Exceptions\ExecutionException;
 use Rossonero585\PhpExpression\Exceptions\IncorrectArgument;
-use Rossonero585\PhpExpression\Exceptions\IncorrectArgumentCount;
 
 class Expression
 {
@@ -37,25 +37,24 @@ class Expression
     }
 
     /**
-     * @param array<int|float|string> $arguments
+     * @param array<string, float|string> $arguments
      * @param int $precision
      * @return float
      * @throws ExecutionException
-     * @throws IncorrectArgument
-     * @throws IncorrectArgumentCount
      */
     public function execute(array $arguments, int $precision = 2) : float
     {
-        $countPassed = count($arguments);
-        $countNeeded = count($this->argumentNames);
+        $passedArguments = array_keys($arguments);
 
-        if ($countNeeded !== $countPassed) {
-            throw new IncorrectArgumentCount($countNeeded, $countPassed);
+        foreach ($this->argumentNames as $argumentName) {
+            if (!in_array($argumentName, $passedArguments)) {
+                throw new ArgumentIsNotPassed($argumentName);
+            }
         }
 
-        foreach ($arguments as $argument) {
+        foreach ($arguments as $name => $argument) {
             if (!preg_match("/^(\d+(?:\.\d+)?)|(\w+)$/", (string)$argument)) {
-                throw new IncorrectArgument((string)$argument);
+                throw new IncorrectArgument($name, (string)$argument);
             }
         }
 
